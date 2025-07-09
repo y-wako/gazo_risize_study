@@ -1,0 +1,30 @@
+from PIL import Image
+import os
+
+# 入力フォルダと出力フォルダ名を定義
+input_folder = 'images'
+output_folder = 'resized_images'
+
+# 出力フォルダ不存在の場合は作成する
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+
+# リサイズ後の幅を定義
+new_width = 500
+
+# 入力フォルダ内の各ファイルを処理
+for filename in os.listdir(input_folder):
+    if filename.endswith(('.png', '.jpg', '.bmp', '.gif')):
+        # 画像ファイルを開く
+        with Image.open(os.path.join(input_folder, filename)) as img:
+            # アスペクト比を維持するために新しい高さを計算
+            aspect_ratio = img.height / img.width
+            new_height = int(new_width * aspect_ratio)
+
+            # 画像リサイズ
+            resized_img = img.resize((new_width, new_height))
+
+            # リサイズされた画像を出力フォルダに保存
+            resized_img.save(os.path.join(output_folder, filename))
+
+print("画像はリサイズされ、'resized_images'フォルダに保存したよ。")
